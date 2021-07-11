@@ -122,7 +122,9 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 	echo "Generating comparison image for zoom $ZOOM"
 
 	if [ "$BEFORE" -nt "$NEW" ] || [ "$AFTER" -nt "$NEW" ] ; then
-		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$NEW"
+		TMP="$(mktemp tmp.XXXXXX.png)"
+		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$TMP"
+		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
 	fi
 
 done
