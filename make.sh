@@ -133,6 +133,13 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
 	fi
 
+	NEW_GIF="progress.$PREFIX.$TIME_BEFORE.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.gif"
+	if [ "$BEFORE" -nt "$NEW_GIF" ] || [ "$AFTER" -nt "$NEW_GIF" ] ; then
+		TMP="$(mktemp tmp.XXXXXX.gif)"
+		gm convert -delay 50 "$BEFORE" "$AFTER" "$TMP"
+		mv "$TMP" "$NEW_GIF"
+	fi
+
 done
 
 
