@@ -1,5 +1,7 @@
 .*.generated
 *.os[mh].pbf
 *.png
+*.gif
 node_modules/
 package-lock.json
+sample.png
