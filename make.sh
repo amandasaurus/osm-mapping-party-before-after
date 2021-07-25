@@ -113,7 +113,7 @@ done
 
 cd "$ROOT"
 for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
-	NEW="progress.$PREFIX.$TIME_BEFORE.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
+	NEW_PNG="progress.$PREFIX.$TIME_BEFORE.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
 	BEFORE="$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
 	AFTER="$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
 	if [ ! -s "$BEFORE" ] || [ ! -s "$AFTER" ] ; then
@@ -121,10 +121,16 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 	fi
 	echo "Generating comparison image for zoom $ZOOM"
 
-	if [ "$BEFORE" -nt "$NEW" ] || [ "$AFTER" -nt "$NEW" ] ; then
+	if [ "$BEFORE" -nt "$NEW_PNG" ] || [ "$AFTER" -nt "$NEW_PNG" ] ; then
 		TMP="$(mktemp tmp.XXXXXX.png)"
 		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$TMP"
-		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
+		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
+	fi
+
+	if [ "$BEFORE" -nt "$NEW_PNG" ] || [ "$AFTER" -nt "$NEW_PNG" ] ; then
+		TMP="$(mktemp tmp.XXXXXX.png)"
+		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$TMP"
+		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
 	fi
 
 done
