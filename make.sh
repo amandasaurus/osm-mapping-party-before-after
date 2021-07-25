@@ -87,7 +87,9 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 		echo "Generating zoom ${ZOOM} level"
 		nik4 openstreetmap-carto/project.xml "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
 		NEW="$(mktemp tmp.XXXXXX.png)"
-		gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white label:"$TIME_BEFORE" -gravity center -append "$NEW"
+		gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white label:"${TIME_BEFORE}" -gravity center -append "$NEW"
+		mv "$NEW" "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
+		gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
 		mv "$NEW" "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
 	fi
 done
@@ -107,6 +109,8 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 		nik4 openstreetmap-carto/project.xml "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
 		NEW="$(mktemp tmp.XXXXXX.png)"
 		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white label:"$TIME_AFTER" -gravity center -append "$NEW"
+		mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
+		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
 		mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
 	fi
 done
@@ -128,16 +132,12 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 	fi
 
 	if [ "$BEFORE" -nt "$NEW_PNG" ] || [ "$AFTER" -nt "$NEW_PNG" ] ; then
-		TMP="$(mktemp tmp.XXXXXX.png)"
-		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$TMP"
-		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
+		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$NEW_PNG"
 	fi
 
 	NEW_GIF="progress.$PREFIX.$TIME_BEFORE.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.gif"
 	if [ "$BEFORE" -nt "$NEW_GIF" ] || [ "$AFTER" -nt "$NEW_GIF" ] ; then
-		TMP="$(mktemp tmp.XXXXXX.gif)"
-		gm convert -delay 50 "$BEFORE" "$AFTER" "$TMP"
-		mv "$TMP" "$NEW_GIF"
+		gm convert -delay 50 "$BEFORE" "$AFTER" "$NEW_GIF"
 	fi
 
 done
