@@ -10,7 +10,7 @@ Follow the [`openstreetmap-carto` installation instructions](https://github.com/
 
 First download an OSM history from, e.g. from [Geofabrik's Download service](https://osm-internal.download.geofabrik.de/). You will need to log in with an OSM account.
 
-A `BBOX` can be can be calculated with [Klokan Technologies's BoundingBox tool](https://boundingbox.klokantech.com/), use the `CSV` format.
+A `BBOX` can be can be calculated with [BBoxFinder.com](http://bboxfinder.com/).
 
 The `BEFORE_TIME` & `AFTER_TIME` are ISO timestamps.
 
