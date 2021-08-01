@@ -1,6 +1,16 @@
 #! /bin/bash
 set -o errexit -o nounset -o pipefail
 
+if [ $# -ge 1 ] && [ "$1" = "-h" ] ; then
+	cat <<-END
+	Usage: $0 INPUT.osh.pbf BEFORETIME AFTERTIME BBOX
+	
+	TIME1 & TIME2 are ISO timestamps
+	bboxes can be found via http://bboxfinder.com/
+	END
+	exit 0
+fi
+
 INPUT_FILE=$(realpath "${1:?Arg 1 should be the path to the pbf file}")
 TIME_BEFORE=${2:?Arg 2 should be the ISO timestamp for the before time}
 TIME_AFTER=${3:?Arg 3 should be the ISO timestamp for the after time}
