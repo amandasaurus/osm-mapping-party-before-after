@@ -64,7 +64,9 @@ if [ "$PBF_FILE" -nt "$AFTER_FILENAME" ] ; then
 fi
 
 
-if ! type "carto" >/dev/null ; then
+if [ ! -s "$ROOT/openstreetmap-carto/node_modules/.bin/carto" ] ; then
+	cd "$ROOT/openstreetmap-carto"
+	echo "Installing carto into $ROOT/openstreetmap-carto/node_modules with npm..."
 	npm install carto -q
 fi
 if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
