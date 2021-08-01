@@ -2,6 +2,10 @@
 
 Make a image of data of an area in OSM with data from 2 dates, showing what was changed before & after
 
+## Installation
+
+Follow the [`openstreetmap-carto` installation instructions](https://github.com/gravitystorm/openstreetmap-carto/blob/master/INSTALL.md), first.
+
 ## Usage
 
 First download an OSM history from, e.g. from [Geofabrik's Download service](https://osm-internal.download.geofabrik.de/). You will need to log in with an OSM account.
