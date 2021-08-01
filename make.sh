@@ -69,7 +69,9 @@ if ! type "carto" >/dev/null ; then
 fi
 if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
 	cd "$ROOT"
-	git submodule add https://github.com/gravitystorm/openstreetmap-carto.git
+	if [ ! -e "$ROOT/openstreetmap-carto" ] ; then
+		git submodule add https://github.com/gravitystorm/openstreetmap-carto.git
+	fi
 	cd "$ROOT/openstreetmap-carto"
 	if [ project.mml -nt project.xml ] ; then
 		./node_modules/.bin/carto -a 3.0.0 project.mml > project.xml
