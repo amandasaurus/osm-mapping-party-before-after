@@ -84,7 +84,14 @@ if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
 	createdb gis
 	psql -d gis -c "create extension postgis;"
 	psql -d gis -c "create extension hstore;"
-	./scripts/get-external-data.py -v
+
+fi
+
+if [ ! -e "$ROOT/openstreetmap-carto/.external-data-done" ] ; then
+	cd "$ROOT/openstreetmap-carto/"
+	echo "Downloading external datasets..."
+	./scripts/get-external-data.py 
+	touch .external-data-done
 	cd "$ROOT"
 fi
 
