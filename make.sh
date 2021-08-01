@@ -73,8 +73,10 @@ if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
 		git submodule update
 	fi
 	cd "$ROOT/openstreetmap-carto"
-	if [ project.mml -nt project.xml ] ; then
-		./node_modules/.bin/carto -a 3.0.0 project.mml > project.xml
+	if [ ! -s project.xml ] || [ project.mml -nt project.xml ] ; then
+		TMP=$(mktemp -p . tmp.project.XXXXXX.xml)
+		./node_modules/.bin/carto -a 3.0.0 project.mml > "$TMP"
+		mv "$TMP" project.xml
 	fi
 	dropdb gis || true
 	createdb gis
