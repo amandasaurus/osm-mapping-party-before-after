@@ -80,10 +80,6 @@ if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
 		./node_modules/.bin/carto -a 3.0.0 project.mml > "$TMP"
 		mv "$TMP" project.xml
 	fi
-	dropdb gis || true
-	createdb gis
-	psql -d gis -c "create extension postgis;"
-	psql -d gis -c "create extension hstore;"
 
 fi
 
@@ -93,6 +89,13 @@ if [ ! -e "$ROOT/openstreetmap-carto/.external-data-done" ] ; then
 	./scripts/get-external-data.py 
 	touch .external-data-done
 	cd "$ROOT"
+fi
+
+if [ "$(psql -At -c "select count(*) from pg_database where datname = 'gis';")" = "0" ] ; then
+	echo "Creating gis database..."
+	createdb gis
+	psql -d gis -c "create extension postgis;"
+	psql -d gis -c "create extension hstore;"
 fi
 
 if [ "$BEFORE_FILENAME" -nt "$ROOT/.$PREFIX.$TIME_BEFORE.$BBOX_COMMA.generated" ] ; then
