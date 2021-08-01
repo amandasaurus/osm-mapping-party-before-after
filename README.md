@@ -4,7 +4,12 @@ Make a image of data of an area in OSM with data from 2 dates, showing what was 
 
 ## Installation
 
+This script uses [`nik4`](https://github.com/Zverik/Nik4) to generate an image with the [`openstreetmap-carto` map style](https://github.com/gravitystorm/openstreetmap-carto/)
+
 Follow the [`openstreetmap-carto` installation instructions](https://github.com/gravitystorm/openstreetmap-carto/blob/master/INSTALL.md), first.
+
+Install `nik4`.
+
 
 ## Usage
 
