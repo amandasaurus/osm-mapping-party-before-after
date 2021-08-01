@@ -70,7 +70,7 @@ fi
 if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
 	cd "$ROOT"
 	if [ ! -e "$ROOT/openstreetmap-carto" ] ; then
-		git submodule add https://github.com/gravitystorm/openstreetmap-carto.git
+		git submodule update
 	fi
 	cd "$ROOT/openstreetmap-carto"
 	if [ project.mml -nt project.xml ] ; then
