@@ -15,15 +15,15 @@ Make a image of OSM data of an area from 2 dates, showing what was changed.
    pipx install nik4
    ```
 1. [Install GraphicsMagick](http://www.graphicsmagick.org/README.html#id4)
-1. Clone this repo:
-   ```bash
-   git clone --recurse-submodules https://github.com/amandasaurus/osm-mapping-party-before-after
-   cd osm-mapping-party-before-after
-   ```
 1. *On macOS:* replace built-in `coreutils` commands with the GNU ones:
    ```bash
    brew install coreutils
    export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH
+   ```
+1. Clone this repo:
+   ```bash
+   git clone --recurse-submodules https://github.com/amandasaurus/osm-mapping-party-before-after
+   cd osm-mapping-party-before-after
    ```
 
 ## Usage
