@@ -4,15 +4,17 @@ Make a image of OSM data of an area from 2 dates, showing what was changed.
 
 ## Installation
 
-1. [Install `openstreetmap-carto`](https://github.com/gravitystorm/openstreetmap-carto/blob/master/INSTALL.md)
 1. *On macOS:* [install Homebrew](https://brew.sh/#:~:text=Install%20Homebrew)
 1. [Install `pipx`](https://pipx.pypa.io/stable/installation/#installing-pipx)
+1. [Install `openstreetmap-carto`](https://github.com/gravitystorm/openstreetmap-carto/blob/4ec2dc9391c411e124c78b3ba1aad9173fea20cb/INSTALL.md)
+1. Install [`osmium-tool`](https://github.com/osmcode/osmium-tool)
 1. [Install Mapnik](https://github.com/mapnik/mapnik/blob/master/INSTALL.md#source-build)
 1. [Install `python-mapnik`](https://github.com/mapnik/python-mapnik#building-from-source)
 1. Install [`nik4`](https://github.com/Zverik/Nik4) (used to generate an image with the [`openstreetmap-carto` map style](https://github.com/gravitystorm/openstreetmap-carto/)):
    ```bash
    pipx install nik4
    ```
+1. [Install GraphicsMagick](http://www.graphicsmagick.org/README.html#id4)
 1. Clone this repo:
    ```bash
    git clone --recurse-submodules https://github.com/amandasaurus/osm-mapping-party-before-after
