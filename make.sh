@@ -67,6 +67,7 @@ fi
 if [ ! -s "$ROOT/openstreetmap-carto/node_modules/.bin/carto" ] ; then
 	cd "$ROOT/openstreetmap-carto"
 	echo "Installing carto into $ROOT/openstreetmap-carto/node_modules with npm..."
+	npm init -y
 	npm install carto -q
 fi
 if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
@@ -134,9 +135,9 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 		echo "Generating zoom ${ZOOM} level"
 		nik4 openstreetmap-carto/project.xml "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
 		NEW="$(mktemp tmp.XXXXXX.png)"
-		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white label:"$TIME_AFTER" -gravity center -append "$NEW"
+		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white -label "$TIME_AFTER" -gravity center -append "$NEW"
 		mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
-		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
+		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white -label "Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
 		mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
 	fi
 done
@@ -153,12 +154,12 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 
 	if [ "$BEFORE" -nt "$NEW_PNG" ] || [ "$AFTER" -nt "$NEW_PNG" ] ; then
 		TMP="$(mktemp tmp.XXXXXX.png)"
-		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$TMP"
-		gm convert "$TMP" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
+		gm montage -geometry +0+0 "$BEFORE" "$AFTER" "$TMP"
+		gm convert "$TMP" -background white -label "Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
 	fi
 
 	if [ "$BEFORE" -nt "$NEW_PNG" ] || [ "$AFTER" -nt "$NEW_PNG" ] ; then
-		gm montage -geometry +0+0  "$BEFORE" "$AFTER" "$NEW_PNG"
+		gm montage -geometry +0+0 "$BEFORE" "$AFTER" "$NEW_PNG"
 	fi
 
 	NEW_GIF="progress.$PREFIX.$TIME_BEFORE.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.gif"
