@@ -39,7 +39,7 @@ Then we build the image that is specified in the `Dockerfile`, picking a name fo
 Depending on how you installed Docker, you might have to run `sudo` for each `docker` command.
 
  ```bash
-`docker build -t before_after_builder
+docker build -t before_after_builder
 ```
 
 This step needs to be run only once, and it can take a few minutes as it will download and build all the dependencies needed. 
@@ -61,7 +61,7 @@ These volumes are used to store external data, i.e. the database contents and th
 Once the docker container is running, you can connect into it to get a bash inside to run the commands as outlined below using:
 
 ```bash
-docker exec -ti map-before-after before_after_builder
+docker exec -ti map-before-after bash
 ```
 
 The resulting shell puts you into the equivalent of the root of this repository, in a folder called `/workdir`. From there you can use this repository as outlined below. 
