@@ -34,12 +34,14 @@ We start, by cloning this repository:
 ```bash
 git clone --recurse-submodules https://github.com/amandasaurus/osm-mapping-party-before-after
 cd osm-mapping-party-before-after
-   ```
+git submodule init
+git submodule update
+```
 Then we build the image that is specified in the `Dockerfile`, picking a name for the image, e.g. `before_after_builder`.
 Depending on how you installed Docker, you might have to run `sudo` for each `docker` command.
 
  ```bash
-docker build -t before_after_builder
+docker build -t before_after_builder .
 ```
 
 This step needs to be run only once, and it can take a few minutes as it will download and build all the dependencies needed. 
