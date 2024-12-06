@@ -70,12 +70,15 @@ The resulting shell puts you into the equivalent of the root of this repository,
 
 All output files are saved in the `/workdir` by default, you can from there move them into `/workdir/output` inside the container to access files on your host operating system.
 
+A [ready-built image is available on Docker Hub](https://hub.docker.com/r/gedankenstuecke/osm-mapping-party-before-after).
+
 ## Usage
 
 1. Download an OSM history file (`.osh.pbf`) e.g. from [Geofabrik's internal download server](https://osm-internal.download.geofabrik.de/?landing_page=true). You will need to log in with an OSM account.
 1. Calculate the `BBOX` with [BBoxFinder.com](http://bboxfinder.com/).
     1. *Draw a rectangle*
     1. Copy the *Box* value
+    1. Make sure coordinates are in `long/lat` format (can be changed in the bottom-right)
 1. Run the following command:
     ```bash
     ./make.sh OSM_HISTORY_FILE.osh.pbf BEFORE_TIME AFTER_TIME BBOX MIN_ZOOM MAX_ZOOM
