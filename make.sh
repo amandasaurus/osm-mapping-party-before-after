@@ -84,19 +84,19 @@ if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
 
 fi
 
-if [ ! -e "$ROOT/openstreetmap-carto/.external-data-done" ] ; then
-	cd "$ROOT/openstreetmap-carto/"
-	echo "Downloading external datasets..."
-	./scripts/get-external-data.py 
-	touch .external-data-done
-	cd "$ROOT"
-fi
-
 if [ "$(psql -At -c "select count(*) from pg_database where datname = 'gis';")" = "0" ] ; then
 	echo "Creating gis database..."
 	createdb gis
 	psql -d gis -c "create extension postgis;"
 	psql -d gis -c "create extension hstore;"
+fi
+
+if [ ! -e "$ROOT/openstreetmap-carto/data/.external-data-done" ] ; then
+	cd "$ROOT/openstreetmap-carto/"
+	echo "Downloading external datasets..."
+	./scripts/get-external-data.py
+	touch data/.external-data-done
+	cd "$ROOT"
 fi
 
 if [ "$BEFORE_FILENAME" -nt "$ROOT/.$PREFIX.$TIME_BEFORE.$BBOX_COMMA.generated" ] ; then
@@ -112,11 +112,11 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 	if [ "$ROOT/.$PREFIX.$TIME_BEFORE.$BBOX_COMMA.generated" -nt "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" ] ; then
 		# eventually the image is too large, so then just break out of the loop
 		echo "Generating zoom ${ZOOM} level"
-		nik4 openstreetmap-carto/project.xml "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
+		nik4.py openstreetmap-carto/project.xml "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
 		NEW="$(mktemp tmp.XXXXXX.png)"
-		gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white label:"${TIME_BEFORE}" -gravity center -append "$NEW"
-		mv "$NEW" "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
-		gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white label:"Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
+		#gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white -label "${TIME_BEFORE}" -gravity center -append "$NEW"
+		#mv "$NEW" "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
+		gm convert "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png" -background white -label "${TIME_BEFORE}, data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
 		mv "$NEW" "$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
 	fi
 done
@@ -133,11 +133,11 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 	if [ "$ROOT/.$PREFIX.$TIME_AFTER.$BBOX_COMMA.generated" -nt "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" ] ; then
 		# eventually the image is too large, so then just break out of the loop
 		echo "Generating zoom ${ZOOM} level"
-		nik4 openstreetmap-carto/project.xml "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
+		nik4.py openstreetmap-carto/project.xml "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -b $BBOX_SPACE -z "$ZOOM" || break
 		NEW="$(mktemp tmp.XXXXXX.png)"
-		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white -label "$TIME_AFTER" -gravity center -append "$NEW"
-		mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
-		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white -label "Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
+		#gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white -label "$TIME_AFTER" -gravity center -append "$NEW"
+		#mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
+		gm convert "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png" -background white -label "${TIME_AFTER}, data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW"
 		mv "$NEW" "$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
 	fi
 done
@@ -155,6 +155,7 @@ for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
 	if [ "$BEFORE" -nt "$NEW_PNG" ] || [ "$AFTER" -nt "$NEW_PNG" ] ; then
 		TMP="$(mktemp tmp.XXXXXX.png)"
 		gm montage -geometry +0+0 "$BEFORE" "$AFTER" "$TMP"
+ 
 		gm convert "$TMP" -background white -label "Data © OpenStreetMap contributors, ODbL" -gravity center -append "$NEW_PNG"
 	fi
 
