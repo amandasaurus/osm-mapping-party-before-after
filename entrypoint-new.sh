@@ -2,6 +2,6 @@
 
 export POSTGRES_PASSWORD='unused'
 
-docker-entrypoint.sh postgres &
+# docker-entrypoint.sh postgres &
 
 exec "$@"
