@@ -2,6 +2,8 @@
 
 Make a image of OSM data of an area from 2 dates, showing what was changed.
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gedankenstuecke/osm-mapping-party-before-after/binderrize?labpath=make-images.ipynb)
+
 ## Installation
 
 1. *On macOS:* [install Homebrew](https://brew.sh/#:~:text=Install%20Homebrew)
