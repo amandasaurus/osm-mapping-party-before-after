@@ -47,7 +47,7 @@ RUN mv fonts/ /usr/share/fonts/type1/gsfonts
 
 # Install python libraries
 
-RUN pip install pyyaml nik4 requests notebook jupyterlab
+RUN pip install pyyaml nik4 requests notebook jupyterlab ipywidgets
 
 # Install carto for stylesheet
 RUN npm install -g carto@1.2.0
