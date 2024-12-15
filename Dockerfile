@@ -62,6 +62,7 @@ USER postgres
 
 RUN mkdir -p ${HOME}/openstreetmap-carto/data 
 RUN mkdir -p ${HOME}/output
+RUN mkdir -p ${HOME}/pgdata
 WORKDIR ${HOME}
 
 ENTRYPOINT ["./entrypoint-new.sh"]
