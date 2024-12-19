@@ -5,6 +5,7 @@ RUN apt-get update \
  ca-certificates gnupg lsb-release locales \
  wget curl \
  git-core unzip \
+ netcat \
 && locale-gen $LANG && update-locale LANG=$LANG 
 
 

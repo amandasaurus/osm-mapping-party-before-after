@@ -2,9 +2,11 @@
 
 Make a image of OSM data of an area from 2 dates, showing what was changed.
 
+You can either install the necessary dependencies on your computer or run the script via Docker (both via MyBinder or in a local container).
+
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gedankenstuecke/osm-mapping-party-before-after/binderrize?labpath=make-images.ipynb)
 
-## Installation
+## Making a local Installation
 
 1. *On macOS:* [install Homebrew](https://brew.sh/#:~:text=Install%20Homebrew)
 1. [Install `pipx`](https://pipx.pypa.io/stable/installation/#installing-pipx)
@@ -28,10 +30,19 @@ Make a image of OSM data of an area from 2 dates, showing what was changed.
    cd osm-mapping-party-before-after
    ```
 
-### Install & use via Docker image
+## Use via Docker or MyBinder
 
-Alternatively, if you do not want to install the whole pipeline yourself, you can run this setup in a Docker container that is ready to use.
-We start, by cloning this repository:
+If you do not want to install the whole pipeline yourself, you can run this setup in a Docker container that is ready-to-use and that can also run in the free-to-use open source cloud infrastructure of _MyBinder_. 
+
+If you want to use the _MyBinder_ version, [click here and wait a bit](https://mybinder.org/v2/gh/gedankenstuecke/osm-mapping-party-before-after/binderrize?labpath=make-images.ipynb). This will launch the version online in a virtual machine and lets you interact with the code through a small Python notebook that will launch automatically and contains all necessary instructions.
+
+The MyBinder version has two drawbacks: 1. You will have to upload the OSM history file (_\*.osh.pbf_) into the container. Depending on the region of interest these can be quite large. 2. Creating the maps will take longer, as other external downloads will have to be downloaded on the fly. See [this blog post for more details](https://tzovar.as/map-comparisons/).
+
+If you want to run the Docker image on your own computer, you can find the necessary [image is available on Docker Hub under `gedankenstuecke/osm-mapping-party-before-after`](https://hub.docker.com/r/gedankenstuecke/osm-mapping-party-before-after). 
+
+### Building the Docker container from scratch
+
+Alternatively, you can also build the container locally if you want to make changes to it/improve it: We start by cloning this repository:
 
 ```bash
 git clone --recurse-submodules https://github.com/amandasaurus/osm-mapping-party-before-after
@@ -47,6 +58,9 @@ docker build -t before_after_builder .
 ```
 
 This step needs to be run only once, and it can take a few minutes as it will download and build all the dependencies needed. 
+
+#### Running the container locally
+
 Once the step is finished, you can launch the container like so:
 
 ```bash
@@ -55,26 +69,26 @@ Once the step is finished, you can launch the container like so:
 
 The command takes two parameters:
 
-1. the name of the container (as specified above)
-2. a full path to a directory you want to use for accessing and writing files to from the container (i.e. Input and output files). Depending on how you installed/run Docker, this folder might need full read/write permissions for other users (e.g. run `chmod 777`). 
+1. the name of the container (e.g. as specified during the `docker build` step)
+2. a full path to a directory you want to use for accessing and writing files to from the container (i.e. input and output files). Depending on how you installed/run Docker, this folder might need full read/write permissions for other users (e.g. run `chmod 777`). 
 
-The `docker_run.sh` command will launch the container itself, including the necessary postgres database etc.
-It will also create two virtual docker volumes (named `pgdata` and `osm_data`). 
-These volumes are used to store external data, i.e. the database contents and the `openstreetmap-carto` external files.
+The `docker_run.sh` command will then launch the container itself, including the necessary postgres database and the notebook interface. It will also create two virtual docker volumes (named `pgdata` and `osm_data`). These volumes are used to store external data, i.e. the database contents and the `openstreetmap-carto` external files, so that subsequent launches are faster than the initial one.
 
-Once the docker container is running, you can connect into it to get a bash inside to run the commands as outlined below using:
+After running the `./docker_run.sh` command you will see a lot of text running by while the container sets itself up. At the end of this, you should see this: 
 
-```bash
-docker exec -ti map-before-after bash
+```
+To access the server, open this file in a browser:
+        file:///home/postgres/.local/share/jupyter/runtime/jpserver-1-open.html
+    Or copy and paste one of these URLs:
+        http://1ce38bef580f:8888/tree?token=asecrettokenwithlotsofcharacters
+        http://127.0.0.1:8888/tree?token=asecrettokenwithlotsofcharacters
 ```
 
-The resulting shell puts you into the equivalent of the root of this repository, in a folder called `/workdir`. From there you can use this repository as outlined below. 
+Clicking on the `http://127.0.0.1:8888/tree?…` link will open the notebook interface in your web-browser, where you can open the `make-images.ipynb` notebook, which will have all the necessary instructions to get started.
 
-All output files are saved in the `/workdir` by default, you can from there move them into `/workdir/output` inside the container to access files on your host operating system.
+## Usage of `make.sh` without the container
 
-A [ready-built image is available on Docker Hub](https://hub.docker.com/r/gedankenstuecke/osm-mapping-party-before-after).
-
-## Usage
+If you have tile-building setup on your computer, you can run `make.sh` without Docker, following these steps:
 
 1. Download an OSM history file (`.osh.pbf`) e.g. from [Geofabrik's internal download server](https://osm-internal.download.geofabrik.de/?landing_page=true). You will need to log in with an OSM account.
 1. Calculate the `BBOX` with [BBoxFinder.com](http://bboxfinder.com/).
