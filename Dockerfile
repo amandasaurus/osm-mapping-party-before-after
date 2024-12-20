@@ -5,6 +5,7 @@ RUN apt-get update \
  ca-certificates gnupg lsb-release locales \
  wget curl \
  git-core unzip \
+ netcat \
 && locale-gen $LANG && update-locale LANG=$LANG 
 
 
@@ -47,19 +48,22 @@ RUN mv fonts/ /usr/share/fonts/type1/gsfonts
 
 # Install python libraries
 
-RUN pip install pyyaml nik4 requests
+RUN pip install pyyaml nik4 requests notebook jupyterlab ipywidgets
 
 # Install carto for stylesheet
 RUN npm install -g carto@1.2.0
 
+ENV HOME=/home/postgres
 
-COPY . /workdir
-
-RUN mkdir -p /workdir/openstreetmap-carto/data 
-RUN mkdir -p /workdir/output
-
-WORKDIR /workdir
-
-RUN chown postgres:postgres -R /workdir  
-
+# Make sure the contents of our repo are in ${HOME}
+COPY . ${HOME}
+RUN usermod -u 1000 postgres
+RUN chown -R 1000 ${HOME}
 USER postgres
+
+RUN mkdir -p ${HOME}/openstreetmap-carto/data 
+RUN mkdir -p ${HOME}/output
+RUN mkdir -p ${HOME}/pgdata
+WORKDIR ${HOME}
+
+ENTRYPOINT ["./entrypoint-new.sh"]

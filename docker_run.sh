@@ -13,4 +13,4 @@ IMAGE_NAME=$1
 OUTPUT_DIR=$2
 
 
-docker run --rm -e POSTGRES_PASSWORD="unused" -v pgdata:/var/lib/postgresql/data -v osm_data:/workdir/openstreetmap-carto/data -v $OUTPUT_DIR:/workdir/output --name map-before-after $IMAGE_NAME
+docker run --rm -e POSTGRES_PASSWORD="unused" -v pgdata:/home/postgres/pgdata -v osm_data:/home/postgres/openstreetmap-carto/data -v $OUTPUT_DIR:/home/postgres/external --name map-before-after -p 8888:8888 $IMAGE_NAME jupyter notebook --NotebookApp.default_url=/lab/ --ip=0.0.0.0 --port=8888
