@@ -4,7 +4,7 @@ Make a image of OSM data of an area from 2 dates, showing what was changed.
 
 You can either install the necessary dependencies on your computer or run the script via Docker (both via MyBinder or in a local container).
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gedankenstuecke/osm-mapping-party-before-after/binderrize?labpath=make-images.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/amandasaurus/osm-mapping-party-before-after/main?labpath=make-images.ipynb)
 
 ## Making a local Installation
 
@@ -34,7 +34,7 @@ You can either install the necessary dependencies on your computer or run the sc
 
 If you do not want to install the whole pipeline yourself, you can run this setup in a Docker container that is ready-to-use and that can also run in the free-to-use open source cloud infrastructure of _MyBinder_. 
 
-If you want to use the _MyBinder_ version, [click here and wait a bit](https://mybinder.org/v2/gh/gedankenstuecke/osm-mapping-party-before-after/binderrize?labpath=make-images.ipynb). This will launch the version online in a virtual machine and lets you interact with the code through a small Python notebook that will launch automatically and contains all necessary instructions.
+If you want to use the _MyBinder_ version, [click here and wait a bit](https://mybinder.org/v2/gh/amandasaurus/osm-mapping-party-before-after/main?labpath=make-images.ipynb). This will launch the version online in a virtual machine and lets you interact with the code through a small Python notebook that will launch automatically and contains all necessary instructions.
 
 The MyBinder version has two drawbacks: 1. You will have to upload the OSM history file (_\*.osh.pbf_) into the container. Depending on the region of interest these can be quite large. 2. Creating the maps will take longer, as other external downloads will have to be downloaded on the fly. See [this blog post for more details](https://tzovar.as/map-comparisons/).
 

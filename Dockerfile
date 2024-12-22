@@ -66,4 +66,6 @@ RUN mkdir -p ${HOME}/output
 RUN mkdir -p ${HOME}/pgdata
 WORKDIR ${HOME}
 
+RUN git clone https://github.com/geofabrik/sendfile_osm_oauth_protector
+
 ENTRYPOINT ["./entrypoint-new.sh"]
