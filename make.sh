@@ -7,8 +7,8 @@ if [ $# -ge 1 ] && [ "$1" = "-h" ] ; then
 
 	BEFORETIME & AFTERTIME are ISO-8601 timestamps
 	BBOX is a comma-separated long/lat bounding box (left,bottom,right,top) and can be found via http://bboxfinder.com/
-  MIN_ZOOM and MAX_ZOOM are optional zoom levels (default: 6 and 12)
-  NUM_FRAMES is the number of frames to generate for the GIF (default: 2)
+	MIN_ZOOM and MAX_ZOOM are optional zoom levels (default: 6 and 12)
+	NUM_FRAMES is the number of frames to generate for the GIF (default: 2)
 	END
 	exit 0
 fi
