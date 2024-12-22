@@ -1,17 +1,17 @@
-FROM postgis/postgis:15-3.5 AS development_build
+FROM ghcr.io/baosystems/postgis:15-3.5 AS development_build
 
-RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
+RUN apt-get update --quiet \
+&& apt-get install --quiet -y --no-install-recommends \
  ca-certificates gnupg lsb-release locales \
  wget curl \
  git-core unzip \
  netcat \
-&& locale-gen $LANG && update-locale LANG=$LANG 
+&& locale-gen $LANG && update-locale LANG=$LANG
 
 
 # Get packages
-RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
+RUN apt-get update --quiet \
+&& apt-get install --quiet -y --no-install-recommends \
  make \
  fonts-hanazono \
  fonts-noto-cjk \
@@ -41,10 +41,10 @@ RUN apt-get update \
 && apt-get autoremove --yes \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-RUN wget https://downloads.sourceforge.net/gs-fonts/ghostscript-fonts-std-8.11.tar.gz
-RUN tar xvf ghostscript-fonts-std-8.11.tar.gz
-RUN mkdir -p /usr/share/fonts/type1/
-RUN mv fonts/ /usr/share/fonts/type1/gsfonts
+RUN wget --quiet https://downloads.sourceforge.net/gs-fonts/ghostscript-fonts-std-8.11.tar.gz \
+&& tar xf ghostscript-fonts-std-8.11.tar.gz \
+&& mkdir -p /usr/share/fonts/type1/ \
+&& mv fonts/ /usr/share/fonts/type1/gsfonts
 
 # Install python libraries
 
@@ -61,7 +61,7 @@ RUN usermod -u 1000 postgres
 RUN chown -R 1000 ${HOME}
 USER postgres
 
-RUN mkdir -p ${HOME}/openstreetmap-carto/data 
+RUN mkdir -p ${HOME}/openstreetmap-carto/data
 RUN mkdir -p ${HOME}/output
 RUN mkdir -p ${HOME}/pgdata
 WORKDIR ${HOME}
