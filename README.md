@@ -38,7 +38,7 @@ If you want to use the _MyBinder_ version, [click here and wait a bit](https://m
 
 The MyBinder version has two drawbacks: 1. You will have to upload the OSM history file (_\*.osh.pbf_) into the container. Depending on the region of interest these can be quite large. 2. Creating the maps will take longer, as other external downloads will have to be downloaded on the fly. See [this blog post for more details](https://tzovar.as/map-comparisons/).
 
-If you want to run the Docker image on your own computer, you can find the necessary [image is available on Docker Hub under `gedankenstuecke/osm-mapping-party-before-after`](https://hub.docker.com/r/gedankenstuecke/osm-mapping-party-before-after). 
+If you want to run the Docker image on your own computer, you can find the necessary [image is available on the GitHub Container Registry under `amandasaurus/osm-mapping-party-before-after`](https://github.com/amandasaurus/osm-mapping-party-before-after/pkgs/container/osm-mapping-party-before-after). 
 
 ### Building the Docker container from scratch
 
