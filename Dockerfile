@@ -1,4 +1,4 @@
-FROM postgis/postgis:15-3.5 AS development_build
+FROM postgis/postgis:17-3.5 AS development_build
 
 RUN apt-get update --quiet \
 && apt-get install --quiet -y --no-install-recommends \
