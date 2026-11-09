@@ -56,7 +56,7 @@ if [ ! -s "$ROOT/openstreetmap-carto/project.xml" ] ; then
   cd "$ROOT/openstreetmap-carto"
   if [ ! -s project.xml ] || [ project.mml -nt project.xml ] ; then
     TMP=$(mktemp -p . tmp.project.XXXXXX.xml)
-    ./node_modules/.bin/carto -a 3.0.0 project.mml > "$TMP"
+    ./node_modules/.bin/carto project.mml > "$TMP"
     mv "$TMP" project.xml
   fi
 fi
@@ -66,6 +66,12 @@ if [ "$(psql -At -c "select count(*) from pg_database where datname = 'gis';")" 
   createdb gis
   psql -d gis -c "create extension postgis;"
   psql -d gis -c "create extension hstore;"
+  # JIT hurts map-rendering queries; openstreetmap-carto recommends disabling it.
+  psql -d gis -c "alter system set jit = off;" -c "select pg_reload_conf();"
+  # openstreetmap-carto v6 (flex backend) needs helper functions and the
+  # carto_pois whitelist table loaded once into the database.
+  psql -d gis -f "$ROOT/openstreetmap-carto/functions.sql"
+  psql -d gis -f "$ROOT/openstreetmap-carto/common-values.sql"
 fi
 
 if [ ! -e "$ROOT/openstreetmap-carto/data/.external-data-done" ] ; then
@@ -110,7 +116,7 @@ for TIME in $TIMESTAMPS; do
   if [ "$FILENAME" -nt "$ROOT/.$PREFIX.$TIME.$BBOX_COMMA.generated" ] ; then
     cd "$ROOT/openstreetmap-carto"
     echo "Importing data for $TIME..."
-    osm2pgsql -G --hstore --style openstreetmap-carto.style --tag-transform-script openstreetmap-carto.lua -d gis "$FILENAME"
+    osm2pgsql --output flex --style openstreetmap-carto-flex.lua -d gis "$FILENAME"
     psql -d gis -f indexes.sql
     touch "$ROOT/.$PREFIX.$TIME.$BBOX_COMMA.generated"
   fi

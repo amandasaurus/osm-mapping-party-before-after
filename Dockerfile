@@ -1,11 +1,11 @@
-FROM postgis/postgis:17-3.5 AS development_build
+FROM postgis/postgis:18-3.6 AS development_build
 
 RUN apt-get update --quiet \
 && apt-get install --quiet -y --no-install-recommends \
  ca-certificates gnupg lsb-release locales \
  wget curl \
  git-core unzip \
- netcat \
+ netcat-openbsd \
 && locale-gen $LANG && update-locale LANG=$LANG
 
 
@@ -28,7 +28,6 @@ RUN apt-get update --quiet \
  npm \
  osm2pgsql \
  osmium-tool \
- osmosis \
  python-is-python3 \
  python3-mapnik \
  python3-lxml \
@@ -48,7 +47,7 @@ RUN wget --quiet https://downloads.sourceforge.net/gs-fonts/ghostscript-fonts-st
 
 # Install python libraries
 
-RUN pip install pyyaml nik4 requests notebook jupyterlab ipywidgets
+RUN pip install --break-system-packages pyyaml nik4 requests notebook jupyterlab ipywidgets
 
 # Install carto for stylesheet
 RUN npm install -g carto@1.2.0
