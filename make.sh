@@ -95,7 +95,12 @@ end_time = parser.isoparse("$end_time")
 delta = (end_time - start_time) / ($num_stops - 1)
 timestamps = [start_time + i * delta for i in range($num_stops)]
 for ts in timestamps:
-    ts = ts.replace(microsecond=0)
+    # Floor to minute resolution: frame spacing over long spans doesn't divide
+    # evenly into whole seconds, so the last frame can land a few microseconds
+    # short of end_time (e.g. 11:17:59.999997 instead of 11:18:00). Minute
+    # granularity is coarse enough that this drift never crosses a minute
+    # boundary, unlike truncating only to whole seconds.
+    ts = ts.replace(second=0, microsecond=0)
     print(ts.isoformat().replace("+00:00", "Z"))
 END
 }
@@ -104,7 +109,9 @@ END
 TIMESTAMPS=$(generate_timestamps "$TIME_BEFORE" "$TIME_AFTER" "$NUM_FRAMES")
 
 # Process each timestamp
+FIRST_TIME=""
 for TIME in $TIMESTAMPS; do
+  [ -z "$FIRST_TIME" ] && FIRST_TIME="$TIME"
   FILENAME="$(realpath "${PREFIX}.$TIME.$BBOX_COMMA.osm.pbf")"
   if [ "$PBF_FILE" -nt "$FILENAME" ] ; then
     NEWFILE=$(mktemp -p . tmp.time.XXXXXX.osm.pbf)
@@ -141,13 +148,19 @@ for TIME in $TIMESTAMPS; do
     fi
   done
 done
+LAST_TIME="$TIME"
 
 cd "$ROOT"
 for ZOOM in $(seq "$MIN_ZOOM" "$MAX_ZOOM") ; do
   # Generate comparison images of start and end times for each zoom level
   NEW_PNG="progress.$PREFIX.$TIME_BEFORE.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
-  BEFORE="$PREFIX.$TIME_BEFORE.$BBOX_COMMA.z${ZOOM}.png"
-  AFTER="$PREFIX.$TIME_AFTER.$BBOX_COMMA.z${ZOOM}.png"
+  # Use the actual first/last generated frame timestamps (FIRST_TIME/LAST_TIME),
+  # not the raw TIME_BEFORE/TIME_AFTER args: frame timestamps are derived from
+  # those args via floating-point interpolation and can drift by a rounding
+  # step, so re-deriving the filename from the raw args can silently miss the
+  # frame that was actually rendered (see generate_timestamps above).
+  BEFORE="$PREFIX.$FIRST_TIME.$BBOX_COMMA.z${ZOOM}.png"
+  AFTER="$PREFIX.$LAST_TIME.$BBOX_COMMA.z${ZOOM}.png"
   if [ ! -s "$BEFORE" ] || [ ! -s "$AFTER" ] ; then
     continue
   fi
